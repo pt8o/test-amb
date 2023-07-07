@@ -70,3 +70,7 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+# Use OpenAI API
+gem "ruby-openai"
+gem "dotenv", "~> 2.8"

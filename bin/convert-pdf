@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'pdf-reader'
+require 'openai'
+require 'dotenv/load'
+require 'csv'
+require 'json'
+
+EMBEDDING_MODEL = 'text-embedding-ada-002'.freeze
+COMPLETION_MODEL = 'text-ada-001'.freeze
+
+if ARGV.empty?
+  puts 'Error: no path to PDF file provided'
+  return
+end
+
+file_path = ARGV[0]
+file_name = File.basename(file_path)
+
+openai = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
+
+reader = PDF::Reader.new(file_path)
+pages_text = reader.pages.map(&:text)
+
+openai_response = openai.embeddings(
+  parameters: {
+    model: EMBEDDING_MODEL,
+    input: [pages_text]
+  }
+)
+
+puts openai_response
+
+CSV.open("app/assets/docs/#{file_name}.embeddings.csv", 'w') do |csv|
+  csv << %w[text embedding]
+  pages_text.each_with_index do |value, index|
+    csv << [value, embeddings[index]]
+  end
+end
