@@ -41,3 +41,6 @@
 
 # Ignore local files (e.g. pre-converted PDFs)
 /local
+
+# Secrets
+.env
