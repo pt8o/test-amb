@@ -5,7 +5,6 @@ const { Configuration, OpenAIApi } = require("openai");
 require("dotenv").config();
 
 const EMBEDDING_MODEL = "text-embedding-ada-002";
-// const COMPLETION_MODEL = "text-ada-001";
 
 if (process.argv.length === 2) {
   console.log("Error: no path to PDF file provided");
