@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { QuestionAndAnswer } from "./QuestionAndAnswer";
+
+import "./global.css";
 import "./App.css";
 
 function App() {
