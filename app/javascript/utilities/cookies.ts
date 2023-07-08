@@ -1,8 +1,8 @@
-function getCsrfTokenFromCookie(cookies) {
+function getCsrfTokenFromCookie(cookies: string) {
   const splitCookies = cookies.split("; ");
   return splitCookies
     .find((cookie) => cookie.startsWith("CSRF-TOKEN="))
-    .split("=")[1];
+    ?.split("=")[1];
 }
 
 const CSRF_TOKEN = getCsrfTokenFromCookie(document.cookie);
