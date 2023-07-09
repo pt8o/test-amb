@@ -1,0 +1,14 @@
+#app {
+  font-family: monospace;
+  max-width: 600px;
+  margin: 2rem auto;
+  line-height: 1.75;
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-primary);
+}
+
+.text-box-description {
+  color: var(--color-secondary);
+}

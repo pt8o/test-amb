@@ -1,0 +1,5 @@
+footer {
+  display: flex;
+  justify-content: space-evenly;
+  color: var(--color-secondary);
+}

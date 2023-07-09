@@ -1,11 +1,37 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { QuestionAndAnswer } from "./QuestionAndAnswer";
 
-const App = () => {
-  return <div>Rails + React</div>;
-};
+import "./global.css";
+import "./App.css";
+
+function App() {
+  return (
+    <div id="app">
+      <Header />
+      <main>
+        <div className="text-box-description">
+          <p>
+            This is an experiment in using AI to make a book's content more
+            accessible. Ask a question about this book and AI will answer it in
+            real time!
+            <p>
+              Please limit your queries to the book's contents; the AI has been
+              instructed to not use outside knowledge.
+            </p>
+          </p>
+        </div>
+        <QuestionAndAnswer />
+      </main>
+      <Footer />
+    </div>
+  );
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  const rootEl = document.getElementById("root");
-  ReactDOM.render(<App />, rootEl);
+  const container = document.getElementById("root");
+  const root = createRoot(container!);
+  root.render(<App />);
 });

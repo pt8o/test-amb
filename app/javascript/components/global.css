@@ -1,0 +1,27 @@
+html {
+  --color-primary: #000;
+  --color-secondary: #777;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+button {
+  outline: none;
+  border: none;
+  background-color: var(--color-primary);
+  padding: 8px 18px;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}
+
+button:hover,
+button:focus {
+  opacity: 0.8;
+}
