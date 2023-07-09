@@ -11,7 +11,7 @@ module CompareEmbeddings
   end
 
   def compare_embeddings(query_embeddings)
-    csv_data = CSV.read("#{Rails.root}/lib/assets/#{ENV['TEXT_CSV_FILENAME']}", headers: true)
+    csv_data = CSV.read("#{Rails.root}/lib/assets/#{ENV['PDF_FILENAME']}.embeddings.csv", headers: true)
     texts = csv_data['text']
     text_embeddings = csv_data['embedding'].map { |embedding| JSON.parse(embedding) }
 
