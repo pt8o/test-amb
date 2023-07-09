@@ -1,7 +1,5 @@
-require_relative "#{Rails.root}/lib/utils/openai_request"
-
 class AskController < ApplicationController
-  include OpenAiRequest
+  include OpenaiRequest
 
   def create
     question = params[:question]

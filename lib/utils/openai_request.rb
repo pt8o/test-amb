@@ -2,9 +2,7 @@ require 'dotenv/load'
 require 'uri'
 require 'net/http'
 
-require_relative './compare_embeddings'
-
-module OpenAiRequest
+module OpenaiRequest
   include CompareEmbeddings
 
   OPENAI_API = {
@@ -79,6 +77,7 @@ module OpenAiRequest
                               })
 
     completion_content = JSON.parse(response.body)
+
     puts completion_content
     completion_content['choices'][0]['message']['content']
   end
