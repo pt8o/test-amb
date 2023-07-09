@@ -1,13 +1,22 @@
 const pdfjs = require("pdfjs-dist");
 const { writeFileSync } = require("node:fs");
 const { Configuration, OpenAIApi } = require("openai");
+const { encoding_for_model } = require("tiktoken");
 
 require("dotenv").config();
 
-const EMBEDDING_MODEL = "text-embedding-ada-002";
+const { OPENAI_API_KEY, OPENAI_EMBEDDINGS_MODEL, OPENAI_COMPLETIONS_MODEL } =
+  process.env;
+
+/**
+ * Although we're sending the PDF text to the Embeddings endpoint, right now we only care about counting the tokens
+ * later being sent to the Completions model. This will be happening at the server level and exceeding the token limit
+ * there will cause the request to fail within the app, which is where failure is more critical.
+ */
+const tiktoken = encoding_for_model(OPENAI_COMPLETIONS_MODEL);
 
 if (process.argv.length === 2) {
-  console.log("Error: no path to PDF file provided");
+  console.error("Error: no path to PDF file provided");
   return;
 }
 
@@ -19,7 +28,7 @@ function arrayToCSV(data) {
 }
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -37,7 +46,7 @@ pdfjs.getDocument(filePath).promise.then((doc) => {
   Promise.all(allPromises).then((vals) => {
     openai
       .createEmbedding({
-        model: EMBEDDING_MODEL,
+        model: OPENAI_EMBEDDINGS_MODEL,
         input: vals,
       })
       .then((response) => {
@@ -47,24 +56,28 @@ pdfjs.getDocument(filePath).promise.then((doc) => {
           (acc, currentValue, currentIndex) => {
             return [
               ...acc,
-              // wrap all contents in double quotes to prevent in-content commas from breaking CSV format
+              // wrap text & embeddings in double quotes to prevent in-content commas from breaking CSV format
               [
                 `"${currentValue}"`,
                 `"${JSON.stringify(data[currentIndex].embedding)}"`,
+                tiktoken.encode(currentValue).length,
               ],
             ];
           },
-          [["text", "embedding"]]
+          [["text", "embedding", "tokens"]]
         );
 
         writeFileSync(
-          `app/lib/assets/${fileName}.embeddings.csv`,
+          `lib/assets/${fileName}.embeddings.csv`,
           arrayToCSV(valsAndEmbeddings),
           "utf-8",
           (err) => {
             console.error("Error writing CSV file:", err);
           }
         );
+
+        console.log(`Successfully wrote lib/assets/${fileName}.embeddings.csv`);
+        tiktoken.free();
       });
   });
 });
