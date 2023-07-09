@@ -2,6 +2,9 @@ require 'matrix'
 require 'csv'
 require 'dotenv/load'
 
+# API max 4096, minus 150 for the return text max, minus 96 as buffer for additional characters in the query
+MAX_TOKENS = 3850
+
 module CompareEmbeddings
   def cosine_similarity(vector1, vector2)
     dot_product = vector1.inner_product(vector2)
@@ -13,15 +16,30 @@ module CompareEmbeddings
   def compare_embeddings(query_embeddings)
     csv_data = CSV.read("#{Rails.root}/lib/assets/#{ENV['PDF_FILENAME']}.embeddings.csv", headers: true)
     texts = csv_data['text']
+    tokens = csv_data['tokens'].map { |token| JSON.parse(token) }
     text_embeddings = csv_data['embedding'].map { |embedding| JSON.parse(embedding) }
 
     relatedness_scores = text_embeddings.map do |embedding|
       cosine_similarity(Vector[*embedding], Vector[*query_embeddings])
     end
 
-    sorted_texts = texts.zip(relatedness_scores).sort_by { |_, score| -score }.map(&:first)
+    sorted_texts_with_tokens = texts.zip(tokens).zip(relatedness_scores).sort_by { |(_, score)| -score }
+    sorted_texts = sorted_texts_with_tokens.map { |(text_and_tokens, _)| text_and_tokens[0] }
+    sorted_tokens = sorted_texts_with_tokens.map { |(text_and_tokens, _)| text_and_tokens[1] }
 
-    # TODO: this is a crude way to limit the request size. Instead, count the tokens and return texts up to the limit.
-    sorted_texts.first(5)
+    puts sorted_texts
+    puts sorted_tokens
+
+    result_texts = []
+    cumulative_tokens = 0
+
+    sorted_texts.each_with_index do |text, index|
+      cumulative_tokens += sorted_tokens[index]
+      break if cumulative_tokens > MAX_TOKENS
+
+      result_texts << text
+    end
+
+    result_texts
   end
 end
