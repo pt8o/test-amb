@@ -77,8 +77,6 @@ module OpenaiRequest
                               })
 
     completion_content = JSON.parse(response.body)
-
-    puts completion_content
     completion_content['choices'][0]['message']['content']
   end
 end
