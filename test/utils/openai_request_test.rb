@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'webmock/minitest'
-require 'rspec/mocks/standalone'
 
 require_relative './mocks/compare_embeddings_mock'
 
