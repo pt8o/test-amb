@@ -23,6 +23,11 @@ export function QuestionAndAnswer() {
         "X-CSRF-Token": CSRF_TOKEN,
       },
       body: JSON.stringify({ question }),
+    }).then((response) => {
+      response.json().then((data) => {
+        // TODO: error handling
+        setAnswer(JSON.stringify(data.message));
+      });
     });
   }
 
