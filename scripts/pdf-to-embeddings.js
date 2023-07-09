@@ -58,7 +58,7 @@ pdfjs.getDocument(filePath).promise.then((doc) => {
         );
 
         writeFileSync(
-          `app/assets/docs/${fileName}.embeddings.csv`,
+          `app/lib/assets/${fileName}.embeddings.csv`,
           arrayToCSV(valsAndEmbeddings),
           "utf-8",
           (err) => {
