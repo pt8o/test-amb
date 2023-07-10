@@ -2,9 +2,6 @@ require 'matrix'
 require 'csv'
 require 'dotenv/load'
 
-# API max 4096, minus 150 for the return text max, minus 96 as buffer for additional characters in the query
-MAX_TOKENS = 3850
-
 module CompareEmbeddings
   def cosine_similarity(vector1, vector2)
     dot_product = vector1.inner_product(vector2)
@@ -32,7 +29,7 @@ module CompareEmbeddings
 
     sorted_texts.each_with_index do |text, index|
       cumulative_tokens += sorted_tokens[index]
-      break if cumulative_tokens > MAX_TOKENS
+      break if cumulative_tokens > MAX_INPUT_TOKENS
 
       result_texts << text
     end
