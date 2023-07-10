@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export function AnimatedText({ text, loop }: { text: string; loop?: boolean }) {
+export function AnimatedText({
+  text,
+  interval = 100,
+  loop,
+}: {
+  text: string;
+  interval?: number;
+  loop?: boolean;
+}) {
   const [displayText, setDisplayText] = useState(text[0]);
   const intervalRef = useRef<NodeJS.Timer | null>(null);
 
@@ -31,7 +39,7 @@ export function AnimatedText({ text, loop }: { text: string; loop?: boolean }) {
         }
         return text.slice(0, prev.length + 1);
       });
-    }, 100);
+    }, interval);
   }
 
   useEffect(() => {

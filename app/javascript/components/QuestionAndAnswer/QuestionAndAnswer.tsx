@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./QuestionAndAnswer.css";
 import { CSRF_TOKEN } from "../../utilities/cookies";
 import { AnimatedText } from "../AnimatedText";
@@ -9,14 +9,19 @@ export function QuestionAndAnswer() {
   const [error, setError] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   function handleChangeQuestion(ev: React.ChangeEvent<HTMLTextAreaElement>) {
-    if (answer) setAnswer("");
-    if (error) setError("");
+    setAnswer("");
+    setError("");
     setQuestion(ev.target.value);
   }
 
-  function clearAnswer() {
+  function handleAskAnother() {
     setAnswer("");
+    setError("");
+    setQuestion("");
+    textareaRef.current?.focus();
   }
 
   function submitQuestion() {
@@ -54,10 +59,13 @@ export function QuestionAndAnswer() {
         onChange={handleChangeQuestion}
         maxLength={120}
         disabled={isFetching}
+        ref={textareaRef}
       ></textarea>
       {answer ? (
         <div>
-          <b>Answer:</b> {answer}
+          <b>Answer:</b>
+          {` `}
+          <AnimatedText text={answer} interval={10} />
         </div>
       ) : null}
       {error ? (
@@ -67,7 +75,7 @@ export function QuestionAndAnswer() {
       ) : null}
       <div className="buttons-container">
         {answer ? (
-          <button onClick={clearAnswer}>Ask another question</button>
+          <button onClick={handleAskAnother}>Ask another question</button>
         ) : (
           <>
             <button onClick={submitQuestion} disabled={isFetching}>
