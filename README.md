@@ -24,3 +24,9 @@ Pass in a path to a PDF file to the script that will fetch the embeddings: `yarn
 ## Run & develop
 
 Run `bin/dev` to run a development server.
+
+## Test
+
+On the backend, there are both standard Rails tests and RSpec tests. To run all Rails tests, just run `rails test`. To run RSpec tests, run `bundle exec rspec path/to/test/file.rb`.
+
+There are currently no frontend tests.
