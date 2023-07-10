@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./QuestionAndAnswer.css";
 import { CSRF_TOKEN } from "../../utilities/cookies";
+import { AnimatedText } from "../AnimatedText";
 
 export function QuestionAndAnswer() {
   const [question, setQuestion] = useState("What is this book about?");
@@ -24,6 +25,8 @@ export function QuestionAndAnswer() {
       return;
     }
 
+    setIsFetching(true);
+
     fetch("./ask", {
       method: "POST",
       headers: {
@@ -32,7 +35,6 @@ export function QuestionAndAnswer() {
       } as HeadersInit,
       body: JSON.stringify({ question }),
     }).then((response) => {
-      setIsFetching(true);
       response.json().then((data) => {
         if (data.error) {
           setError(data.error);
@@ -68,7 +70,9 @@ export function QuestionAndAnswer() {
           <button onClick={clearAnswer}>Ask another question</button>
         ) : (
           <>
-            <button onClick={submitQuestion}>Ask a question</button>
+            <button onClick={submitQuestion} disabled={isFetching}>
+              {isFetching ? <AnimatedText text="..." loop /> : "Ask a question"}
+            </button>
           </>
         )}
       </div>

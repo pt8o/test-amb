@@ -19,11 +19,16 @@ button {
   color: #fff;
   border-radius: 10px;
   font-size: 1.2rem;
+  min-width: 100px;
 }
 
 button:hover,
 button:focus {
   opacity: 0.8;
+}
+
+button:disabled {
+  opacity: 0.5;
 }
 
 .__error {
