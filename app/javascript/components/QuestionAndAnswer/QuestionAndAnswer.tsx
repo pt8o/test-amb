@@ -51,6 +51,24 @@ export function QuestionAndAnswer() {
     });
   }
 
+  function randomQuestion() {
+    const questions = [
+      "Are these true stories or fiction?",
+      "How many dogs did Tolstoy have?",
+      "What were the dogs' names?",
+      "How many chapters are in the book?",
+      "What kind of dogs did Tolstoy have?",
+      "Were both dogs alive at the same time?",
+      "What were the dogs like?",
+      "Where did Tolstoy and his dogs live?",
+      "What happens in the story with the convicts?",
+    ];
+
+    const randomQuestion =
+      questions[Math.floor(Math.random() * questions.length)];
+    setQuestion(randomQuestion);
+  }
+
   return (
     <div id="question-and-answer">
       <textarea
@@ -79,7 +97,14 @@ export function QuestionAndAnswer() {
         ) : (
           <>
             <button onClick={submitQuestion} disabled={isFetching}>
-              {isFetching ? <AnimatedText text="..." loop /> : "Ask a question"}
+              {isFetching ? <AnimatedText text="..." loop /> : "Ask"}
+            </button>
+            <button
+              onClick={randomQuestion}
+              disabled={isFetching}
+              className="__secondary"
+            >
+              Get a random question
             </button>
           </>
         )}
