@@ -6,6 +6,7 @@ export function QuestionAndAnswer() {
   const [question, setQuestion] = useState("What is this book about?");
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
   function handleChangeQuestion(ev: React.ChangeEvent<HTMLTextAreaElement>) {
     if (answer) setAnswer("");
@@ -18,20 +19,27 @@ export function QuestionAndAnswer() {
   }
 
   function submitQuestion() {
+    if (!question) {
+      setError("Question cannot be empty");
+      return;
+    }
+
     fetch("./ask", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token": CSRF_TOKEN,
-      },
+      } as HeadersInit,
       body: JSON.stringify({ question }),
     }).then((response) => {
+      setIsFetching(true);
       response.json().then((data) => {
         if (data.error) {
           setError(data.error);
         } else {
           setAnswer(data.message);
         }
+        setIsFetching(false);
       });
     });
   }
@@ -43,6 +51,7 @@ export function QuestionAndAnswer() {
         value={question}
         onChange={handleChangeQuestion}
         maxLength={120}
+        disabled={isFetching}
       ></textarea>
       {answer ? (
         <div>
