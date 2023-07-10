@@ -2,7 +2,7 @@ class AskController < ApplicationController
   include OpenaiRequest
 
   def create
-    question = params[:question]
+    question = params[:question][0, 120]
     question_answer = QuestionAnswer.find_by(question:)
 
     if question_answer
