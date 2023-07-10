@@ -17,13 +17,26 @@ button {
   background-color: var(--color-primary);
   padding: 8px 18px;
   color: #fff;
+  border: 1px solid transparent;
   border-radius: 10px;
   font-size: 1.2rem;
+  min-width: 100px;
+}
+
+button.__secondary {
+  background-color: var(--color-secondary);
 }
 
 button:hover,
 button:focus {
   opacity: 0.8;
+}
+
+button:disabled {
+  background-color: #fff;
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  opacity: 0.5;
 }
 
 .__error {

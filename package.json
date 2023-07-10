@@ -10,9 +10,14 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/node": "^20.4.1",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
     "openai": "^3.3.0",
     "pdfjs-dist": "^3.8.162",
-    "tiktoken": "^1.0.10"
+    "tiktoken": "^1.0.10",
+    "typescript": "^5.1.6"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets",

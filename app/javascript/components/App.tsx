@@ -17,10 +17,10 @@ function App() {
             This is an experiment in using AI to make a book's content more
             accessible. Ask a question about this book and AI will answer it in
             real time!
-            <p>
-              Please limit your queries to the book's contents; the AI has been
-              instructed to not use outside knowledge.
-            </p>
+          </p>
+          <p>
+            Please limit your queries to the book's contents; the AI has been
+            instructed to not use outside knowledge.
           </p>
         </div>
         <QuestionAndAnswer />
