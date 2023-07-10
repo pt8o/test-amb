@@ -1,4 +1,3 @@
-require 'dotenv/load'
 require 'uri'
 require 'net/http'
 
@@ -7,12 +6,12 @@ module OpenaiRequest
 
   OPENAI_API = {
     'embeddings' => {
-      'url' => 'https://api.openai.com/v1/embeddings',
-      'model' => ENV['OPENAI_EMBEDDINGS_MODEL']
+      'url' => OPENAI_EMBEDDINGS_ENDPOINT,
+      'model' => OPENAI_EMBEDDINGS_MODEL
     },
     'completions' => {
-      'url' => 'https://api.openai.com/v1/chat/completions',
-      'model' => ENV['OPENAI_COMPLETIONS_MODEL']
+      'url' => OPENAI_COMPLETIONS_ENDPOINT,
+      'model' => OPENAI_COMPLETIONS_MODEL
     }
   }
 
@@ -29,7 +28,7 @@ module OpenaiRequest
     request = Net::HTTP::Post.new(parsed_url.path)
     request['Content-Type'] = 'application/json'
     request['Accept'] = 'application/json'
-    request['Authorization'] = "Bearer #{ENV['OPENAI_API_KEY']}"
+    request['Authorization'] = "Bearer #{OPENAI_API_KEY}"
 
     complete_body = body
     complete_body['model'] = model
@@ -53,14 +52,14 @@ module OpenaiRequest
     messages = [
       {
         'role' => 'system',
-        'content' => "You are an assistant answering questions about a book.\n
+        'content' => "You're an assistant answering questions about a book.\n
           Please keep answers to three sentences maximum.\n
-          Answer questions solely based on the text provided, not based on your own outside knowledge.\n
-          If you don't know the answer to something, please say: 'Sorry, I don't know the answer to that based on this book's contents.'\n
-          If you don't understand a question, please say: 'Sorry, I don't understand the question.'\n
+          Answer solely based on the text provided, not your own outside knowledge.\n
+          If you don't know the answer, say: 'Sorry, I don't know the answer to that based on the book's contents.'\n
+          If you don't understand a question, say: 'Sorry, I don't understand the question.'\n
           \n
           The book is 'Stories of My Dogs' by Leo Tolstoy.\n
-          Here are some of the most pertinent passages:\n
+          Here are the most relevant passages for this question:\n
           #{sorted_texts.join("\n")}
         "
       },
@@ -71,12 +70,14 @@ module OpenaiRequest
     ]
 
     response = openai_request('completions', {
-                                'max_tokens' => 150,
+                                'max_tokens' => MAX_OUTPUT_TOKENS,
                                 'temperature' => 0.0,
                                 'messages' => messages
                               })
 
+    return { 'error' => 'Sorry, there was an error!' } unless response.code == '200'
+
     completion_content = JSON.parse(response.body)
-    completion_content['choices'][0]['message']['content']
+    { 'message' => completion_content['choices'][0]['message']['content'] }
   end
 end

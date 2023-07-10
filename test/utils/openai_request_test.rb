@@ -16,7 +16,7 @@ class OpenaiRequestTest < ActiveSupport::TestCase
         "index": 0,
         "message": {
           "role": "assistant",
-          "content": "\n\nHello there, how may I assist you today?"
+          "content": "Test message"
         },
         "finish_reason": "stop"
       }],
@@ -68,6 +68,6 @@ class OpenaiRequestTest < ActiveSupport::TestCase
   test 'get_completion returns completion' do
     completion = get_completion('This is a test')
 
-    assert_equal "\n\nHello there, how may I assist you today?", completion
+    assert_equal 'Test message', completion['message']
   end
 end

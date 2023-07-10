@@ -2,7 +2,7 @@ class AskController < ApplicationController
   include OpenaiRequest
 
   def create
-    question = params[:question]
+    question = params[:question][0, 120]
     question_answer = QuestionAnswer.find_by(question:)
 
     if question_answer
@@ -10,18 +10,14 @@ class AskController < ApplicationController
         'message' => question_answer.answer
       }
     else
-      response = get_new_answer(question)
-      question_answer = QuestionAnswer.new(question:, answer: response['message'])
-      question_answer.save
+      response = get_completion(question)
+
+      unless response.key?('error')
+        question_answer = QuestionAnswer.new(question:, answer: response['message'])
+        question_answer.save
+      end
     end
 
     render json: response, status: :created
-  end
-
-  private
-
-  def get_new_answer(question)
-    completion = get_completion(question)
-    { 'message' => completion }
   end
 end
