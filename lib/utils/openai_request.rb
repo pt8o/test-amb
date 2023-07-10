@@ -76,7 +76,9 @@ module OpenaiRequest
                                 'messages' => messages
                               })
 
+    return { 'error' => 'Sorry, there was an error!' } unless response.code == '200'
+
     completion_content = JSON.parse(response.body)
-    completion_content['choices'][0]['message']['content']
+    { 'message' => completion_content['choices'][0]['message']['content'] }
   end
 end

@@ -27,9 +27,6 @@ module CompareEmbeddings
     sorted_texts = sorted_texts_with_tokens.map { |(text_and_tokens, _)| text_and_tokens[0] }
     sorted_tokens = sorted_texts_with_tokens.map { |(text_and_tokens, _)| text_and_tokens[1] }
 
-    puts sorted_texts
-    puts sorted_tokens
-
     result_texts = []
     cumulative_tokens = 0
 
