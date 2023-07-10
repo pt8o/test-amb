@@ -12,9 +12,10 @@ module CompareEmbeddings
 
   def compare_embeddings(query_embeddings)
     csv_data = CSV.read("#{Rails.root}/lib/assets/#{ENV['PDF_FILENAME']}.embeddings.csv", headers: true)
+
     texts = csv_data['text']
-    tokens = csv_data['tokens'].map { |token| JSON.parse(token) }
     text_embeddings = csv_data['embedding'].map { |embedding| JSON.parse(embedding) }
+    tokens = csv_data['tokens'].map { |token| JSON.parse(token) }
 
     relatedness_scores = text_embeddings.map do |embedding|
       cosine_similarity(Vector[*embedding], Vector[*query_embeddings])
