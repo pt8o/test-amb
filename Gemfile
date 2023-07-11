@@ -80,3 +80,6 @@ group :test do
   gem 'rspec-rails'
   gem 'webmock'
 end
+
+# Needed for Heroku env
+gem 'matrix'
