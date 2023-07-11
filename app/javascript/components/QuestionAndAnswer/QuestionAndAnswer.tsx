@@ -72,14 +72,18 @@ export function QuestionAndAnswer() {
 
   return (
     <div id="question-and-answer">
-      <textarea
-        id="question-box"
-        value={question}
-        onChange={handleChangeQuestion}
-        maxLength={120}
-        disabled={isFetching}
-        ref={textareaRef}
-      ></textarea>
+      <div id="question-box-container">
+        <textarea
+          id="question-box"
+          value={question}
+          onChange={handleChangeQuestion}
+          maxLength={120}
+          disabled={isFetching}
+          ref={textareaRef}
+          rows={3}
+        ></textarea>
+        <div id="character-counter">{question.length} / 120</div>
+      </div>
       {answer ? (
         <div>
           <b>Answer:</b>
