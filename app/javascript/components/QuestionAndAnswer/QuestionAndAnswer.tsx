@@ -30,6 +30,7 @@ export function QuestionAndAnswer() {
       return;
     }
 
+    setError("");
     setIsFetching(true);
 
     fetch("./ask", {
