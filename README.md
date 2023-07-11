@@ -30,3 +30,7 @@ Run `bin/dev` to run a development server.
 On the backend, there are both standard Rails tests and RSpec tests. To run all Rails tests, just run `rails test`. To run RSpec tests, run `bundle exec rspec path/to/test/file.rb`.
 
 There are currently no frontend tests.
+
+# General thoughts, design decisions, future work, etc.
+
+Please see [MISC.md](/MISC.md).
