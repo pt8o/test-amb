@@ -16,6 +16,14 @@ I did not bother counting the max tokens before hitting the Embeddings endpoint.
 
 I've also made some fuzzy guesses in setting the `MAX_INPUT_TOKENS` value (which you can read in the comments in `config/initializers/application_constants.rb`). If we wanted to really optimize this we could count the tokens of the preamble that is sent before the sorted text, and the user's question, and even the additional code characters (brackets, quotation marks, etc.) which are included in the token count.
 
+## Development
+
+I prioritized getting up and running quickly which led to some problems later on.
+
+SQLite is very easy to plug-and-play but is not good for deployment; Heroku specifically recommends against it. I spun up the app with SQLite but later had to spend some time reconfiguring the app to use Postgres.
+
+I found a quick way to get a React app served from a Rails app. The React app itself runs in watcher mode and during development it hot reloads well, but the Rails app does not hot reload on the JS file change! I only spent a few minutes exploring this but it seems like I should have chosen a different build/dev pipeline to prioritize HMR. This was a small headache during development.
+
 ## Testing
 
 Frontend testing would be nice. I wasn't as concerned with the frontend tests. I feel like the backend is where there are more moving parts and breaking points, whereas on the frontend the user's surface area of interaction is quite small. I can click through to every possible frontend state in a matter of seconds. Nonetheless, in production everything should have automated tests as a best practice.
@@ -34,4 +42,14 @@ Since each new question (a) hits the OpenAI API, which costs real life money, an
 
 ## Code style
 
-I've written the `OpenaiRequest` as a module in `lib/utils/` with a few methods (`openai_request`, `get_embeddings`, `get_completion`). This works but does not feel "Rails-y" as an approach. I think this would be better as a class, with these functions as class methods, so we would invoke them more like a library, e.g. `OpenaiRequest.completion(query)`.
+I've written the `OpenaiRequest` as a module in `lib/utils/` with a few methods (`openai_request`, `get_embeddings`, `get_completion`). This works but does not feel "Rails-y" as an approach. I think this would be better as a class, with these functions as class methods, so we would invoke them more like a library, e.g. `OpenaiRequest.completion(query)`. This looks pretty close to how the Ruby OpenAI gems worked. It would not be too hard of a refactor.
+
+## UX
+
+I've matched the existing design. Sometimes I wonder whether old questions/answers should stay up in a chat-style interface, though I do like the simplicity.
+
+The saved questions get answered instantly while new questions go to OpenAI, and that request can take a long time, sometimes several seconds. This discrepancy is weird UX and I wonder how we could let the user know that some questions will take longer to answer than others, without them needing to know about how the machine works.
+
+## Error handling
+
+This is probably the weakest part of the app at the moment. The frontend is sent a pretty generic error message, and backend errors are not logged anywhere.
